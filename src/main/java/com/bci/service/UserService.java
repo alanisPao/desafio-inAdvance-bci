@@ -23,6 +23,6 @@ public interface UserService {
 	
 	void delete(String id) throws UserNotFoundException;
 	
-	
+	void updateUser(UserRequestDTO user);
 
 }

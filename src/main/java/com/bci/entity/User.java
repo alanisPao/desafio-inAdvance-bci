@@ -59,11 +59,11 @@ public class User {
 	private String token;
 	
 	@Builder.Default
-	@Column(name="isActive")
+	@Column(name="is_active")
 	private Boolean isActive = true;
 	
 	@OneToMany(targetEntity = Phone.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "phone_id", referencedColumnName = "id")
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 
 	private List<Phone> phones;
 

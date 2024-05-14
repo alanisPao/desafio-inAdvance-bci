@@ -16,8 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,7 +57,7 @@ public class AuthController {
 	@ApiResponses(value = { 
 	        @ApiResponse(code = 200, message = "authenticated user", response = LoginResponse.class),
 	        @ApiResponse(code = 403 ,message = "Unauthorized user")}) 
-	public ResponseEntity<?> login(@Valid LoginRequest authenticationRequest) throws Exception {
+	public ResponseEntity<?> login(@RequestBody LoginRequest authenticationRequest) throws Exception {
 
 		log.info("Login");
 		String username = authenticationRequest.getUsername();
@@ -69,21 +71,12 @@ public class AuthController {
 
 		final String token = JwtUtil.generateJWTToken(username);
 		
-		
-         UserResponseDTO user = service.findByEmail(username);
-         log.info("usuario encontrado "+user);
-         user.setToken(token);
-         log.info("ahora actualizar "+user);
-         UserRequestDTO rq = UserRequestDTO.builder()
-        		 .name(user.getName())
-                 .email(user.getEmail())
-                 .password(user.getPassword())
-                 .phones(user.getPhone())
-                 .token(token)
-                 .build();
+		UserRequestDTO user = UserRequestDTO.builder()
+				.email(username)
+				.token(token)
+				.build();
+		service.updateUser(user);
 
-         service.update(rq, user.getId());
-         
 		return ResponseEntity.ok(new LoginResponse(username, token));
 
 

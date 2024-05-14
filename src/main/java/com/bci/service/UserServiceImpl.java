@@ -1,5 +1,6 @@
 package com.bci.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bci.dto.PhoneDTO;
 import com.bci.dto.UserRequestDTO;
@@ -56,7 +58,7 @@ public class UserServiceImpl implements UserService{
 		
 		
 		User newUser = repository.findByEmail(user.getEmail());
-		log.info("user "+newUser);
+		log.info("user "+newUser.getPhones());
 		UserResponseDTO response = UserMapper.converToDto(newUser);
 		
 		return response;
@@ -93,16 +95,21 @@ public class UserServiceImpl implements UserService{
 		Optional<User> optionalUser = repository.findById(id);
 
 		// Verifica si el usuario existe
-		if (optionalUser.isPresent()) {
+		if(optionalUser.isPresent()) {
 			User existingUser = optionalUser.get();
 
 			existingUser.setName(user.getName());
 			existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             log.info("phones "+user.getPhones());
+            /*
+    		if (
 			 // Actualiza los teléfonos del usuario
-            List<Phone> updatedPhones = updatePhones(existingUser.getPhones(), user.getPhones());
-            existingUser.setPhones(updatedPhones);
-            
+            if(user.getPhones() != null) {
+            	 List<Phone> updatedPhones = updatePhones(existingUser.getPhones(), user.getPhones());
+                 existingUser.setPhones(updatedPhones);
+                 
+            }*/
+           
 			User savedUser = repository.save(existingUser);
 			
 			UserResponseDTO response = UserMapper.converToDto(savedUser);
@@ -166,6 +173,13 @@ public class UserServiceImpl implements UserService{
 	    }
 
 	    return updatedPhones;
+	}
+
+	@Override
+	public void updateUser(UserRequestDTO user) {
+		
+		repository.updateUser(user.getEmail(), user.getToken(), LocalDateTime.now(), LocalDateTime.now());
+		
 	}
 
 }
