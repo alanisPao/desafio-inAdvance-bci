@@ -129,7 +129,7 @@ http://localhost:8090/swagger-ui.html#/
 
 Ejemplo
 
-![alt text](https://github.com/alanisPao/desafio-inAdvance-bci/blob/main/token.png?raw=true)
+![alt text](https://github.com/alanisPao/desafio-inAdvance-bci/blob/master/token.png?raw=true)
 
 
 
