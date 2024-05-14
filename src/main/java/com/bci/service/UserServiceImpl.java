@@ -65,13 +65,14 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public UserResponseDTO findByEmail(String email) throws UserNotFoundException {
 		User findUser = repository.findByEmail(email);
 		if(findUser == null) {
 			throw new UserNotFoundException("Usuario no encontrado");
 
 		}
-		log.info("phones "+findUser.getPhones());
+
 		UserResponseDTO response = UserMapper.converToDto(findUser);
 		return response ;
 	}
@@ -100,16 +101,8 @@ public class UserServiceImpl implements UserService{
 
 			existingUser.setName(user.getName());
 			existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            log.info("phones "+user.getPhones());
-            /*
-    		if (
-			 // Actualiza los teléfonos del usuario
-            if(user.getPhones() != null) {
-            	 List<Phone> updatedPhones = updatePhones(existingUser.getPhones(), user.getPhones());
-                 existingUser.setPhones(updatedPhones);
-                 
-            }*/
-           
+    
+
 			User savedUser = repository.save(existingUser);
 			
 			UserResponseDTO response = UserMapper.converToDto(savedUser);
@@ -121,14 +114,13 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void delete(String id) throws UserNotFoundException {
+	public void delete(String id) {
 
 		Optional<User> optionalUser = repository.findById(id);
 		
 		if(optionalUser.isPresent()){
 			repository.delete(optionalUser.get());
         }
-        throw new UserNotFoundException("Usuario no encontrado"); 
 
 		
 	}
@@ -144,36 +136,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	
-	private List<Phone> updatePhones(List<Phone> existingPhones, List<PhoneDTO> newPhones) {
-	    List<Phone> updatedPhones = new ArrayList<>();
 
-	    // Actualiza los teléfonos existentes con los nuevos datos
-	    int minSize = Math.min(existingPhones.size(), newPhones.size());
-	    for (int i = 0; i < minSize; i++) {
-	        Phone existingPhone = existingPhones.get(i);
-	        PhoneDTO newPhoneDTO = newPhones.get(i);
-
-	        existingPhone.setCityCode(newPhoneDTO.getCityCode());
-	        existingPhone.setCountryCode(newPhoneDTO.getCountryCode());
-	        existingPhone.setNumber(newPhoneDTO.getNumber());
-
-	        updatedPhones.add(existingPhone);
-	    }
-
-	    // Agrega nuevos teléfonos si hay más en la lista de nuevos teléfonos
-	    for (int i = minSize; i < newPhones.size(); i++) {
-	        PhoneDTO newPhoneDTO = newPhones.get(i);
-
-	        Phone newPhone = new Phone();
-	        newPhone.setCityCode(newPhoneDTO.getCityCode());
-	        newPhone.setCountryCode(newPhoneDTO.getCountryCode());
-	        newPhone.setNumber(newPhoneDTO.getNumber());
-
-	        updatedPhones.add(newPhone);
-	    }
-
-	    return updatedPhones;
-	}
 
 	@Override
 	public void updateUser(UserRequestDTO user) {

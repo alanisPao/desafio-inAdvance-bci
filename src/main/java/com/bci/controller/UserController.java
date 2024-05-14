@@ -56,11 +56,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/all")
+	@ApiOperation(value="Listar usuarios")
 	public ResponseEntity<List<UserResponseDTO>> findAllUsers(@RequestHeader("Authorization") String bearerToken){	
 		return ResponseEntity.ok(service.findAll());
 	}
 	
 	@GetMapping("/profile")
+	@ApiOperation(value="Listar usuario por email")
 	public ResponseEntity<?> findUserByEmail(@RequestParam(name = "email") String email, @RequestHeader("Authorization") String bearerToken) throws UserNotFoundException{
 		
 		UserResponseDTO user = service.findByEmail(email);
@@ -70,15 +72,9 @@ public class UserController {
 	
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody UserRequestDTO rqDto,
-			@RequestHeader("Authorization") String bearerToken) throws UserNotFoundException{
-		
-        return ResponseEntity.ok(service.update(rqDto, id));
-		
-	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
+	@ApiOperation(value="Eliminar usuario por id")
     public void deleteUser(@PathVariable String id) throws UserNotFoundException{
                 service.delete(id);
     }
