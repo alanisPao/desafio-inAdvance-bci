@@ -146,7 +146,13 @@ Debe recibir en el cuerpo un usuario con los campos "nombre", "email", "password
    }
 ```
 #2. Api Obtener perfil usuario : http://localhost:8090/api/v1/users/profile?email=ejemplo@gmail.com
-Se debe enviar el token y consultar por el email del usuario, retorna un son con los datos del usuario
+Se debe enviar el token y consultar por el email del usuario, retorna un json con los datos del usuario
+Ejemplo json request
+ ```json
+    {
+         "email": "admin@gmail.com"
+     }
+ ```
 
 #3. Api obtener todos los usuarios : http://localhost:8090/api/v1/users/all
 Devuelve todos los usuarios registrados
