@@ -1,6 +1,5 @@
 # InAdvice Excercise
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 ## Requested Requirements.
 
@@ -14,18 +13,18 @@ Todos los mensajes deben seguir el formato:
 - Ese endpoint deberá recibir un usuario con los campos "nombre", "correo", "contraseña", más
 un listado de objetos "teléfono", respetando el siguiente formato:
 
+{
+    "name": "Juan Rodriguez",
+    "email": "juan@rodriguez.org",
+    "password": "hunter2",
+    "phones": [
         {
-        "name": "Juan Rodriguez",
-        "email": "juan@rodriguez.org",
-        "password": "hunter2",
-        "phones": [
-        {
-        "number": "1234567",
-        "citycode": "1",
-        "contrycode": "57"
+            "number": "1234567",
+            "citycode": "1",
+            "contrycode": "57"
         }
-        ]
-        }
+    ]
+}
 
 - Responder el código de status HTTP adecuado
 - En caso de éxito, retorne el usuario y los siguientes campos:
@@ -119,18 +118,42 @@ http://localhost:8090/swagger-ui.html#/
  	Response
  	
 	{
-    "username": "admin@gmail.com",
-    "token": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzE1NjU3ODgzLCJleHAiOjE3MTU3NDQyODN9.obYr1iDhAPA7LYXRt6GRLE6EscDv64i7KqZiaqf_S-0"
+            "username": "admin@gmail.com",
+            "token": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzE1NjU3ODgzLCJleHAiOjE3MTU3NDQyODN9.obYr1iDhAPA7LYXRt6GRLE6EscDv64i7KqZiaqf_S-0"
   }
  	
-#2. Apis del crud
+#2. Apis Crud
 
- - luego con el token ya generado, podemos realizar las operaciones de la aplicación, accede a las APIs con el token generado, agregando siempre el token en la opción Autorización como "Bearer Token" .	
+ - Con el token ya generado, podemos realizar las operaciones de la aplicación, accede a las APIs con el token generado, agregando siempre el token en la opción Autorización como "Bearer Token" .	
 
 Ejemplo
 
 ![alt text](https://github.com/alanisPao/desafio-inAdvance-bci/blob/master/token.png?raw=true)
 
+#1. Api Crear Usuario : http://localhost:8090/api/v1/users/
+Debe recibir en el cuerpo un usuario con los campos "nombre", "email", "password", más una lista de objetos "phone", siguiendo el siguiente formato:
 
+```json
+   {
+        "name": "Juan Rodriguez",
+    "email": "juan@rodriguez.org",
+    "password": "hunter2",
+    "phones": [
+        {
+            "number": "1234567",
+            "citycode": "1",
+            "contrycode": "57"
+        }
+    ]
+   }
+```
+#2. Api Obtener perfil usuario : http://localhost:8090/api/v1/users/profile?email=ejemplo@gmail.com
+Se debe enviar el token y consultar por el email del usuario, retorna un son con los datos del usuario
 
-#3. Las demas apis se prueban de la misma manera, con el token generado por JWT, tendremos acceso y revisando la documentacion swagger para realizar las pruebas
+#3. Api obtener todos los usuarios : http://localhost:8090/api/v1/users/all
+Devuelve todos los usuarios registrados
+
+#4. Api eliminar usuario : http://localhost:8090/api/v1/users/delete/?
+Para eliminar a un usuario se debe enviar el id como parámetro
+
+Todas las apis del crud se prueban con el token generado por JWT.
